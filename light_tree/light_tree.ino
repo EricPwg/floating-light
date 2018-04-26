@@ -5,14 +5,14 @@
 #define DATA_PIN1 6
 #define DATA_PIN2 7
 
-#define RCWLPin A6
-#define TOUCHPin1 A7
-#define TOUCHPin2 A7
+#define RCWLPin A3
+#define TOUCHPin1 A5
+#define TOUCHPin2 A6
 #define RCWLTHRESHOLD 700
 #define TOUCHTHRESHOLD 700
-#define RCWLLEDPin 3
-#define TOUCH1LEDPin 4
-#define TOUCH2LEDPin 5
+#define RCWLLEDPin 2
+#define TOUCH1LEDPin 3
+#define TOUCH2LEDPin 4
 
 CRGB leds_low[NUM_LEDS];
 CRGB leds_high[NUM_LEDS];
@@ -57,7 +57,7 @@ struct Color green = {20, 139, 40};
 struct Color orange = {220, 70, 0};
 struct Color white = {255, 255, 255};
 
-struct Color pink = {250, 128, 120};
+struct Color pink = {250, 100, 50};
 
 struct Color current = {0, 0, 0}; //current color setting
 struct Color target = {0, 0, 0};  //target color setting
@@ -67,6 +67,7 @@ void setup() {
   Serial.begin(9600);
   FastLED.addLeds<WS2813, DATA_PIN1, RGB>(leds_low, NUM_LEDS);
   FastLED.addLeds<WS2813, DATA_PIN2, RGB>(leds_high, NUM_LEDS);
+  state = 1;
   current = blue;
   target = green;
 }
@@ -86,7 +87,7 @@ void loop() {
       handle_state12();
       break;
     case 21:
-	  handle_state2();
+	    handle_state2();
       handle_state21();
       break;
     case 13:
@@ -162,6 +163,7 @@ void loop() {
 	    if (state21_loc > TOTAL_NUM_LEDS+15){
 			state = 1;
 			current = blue;
+      target = blue;
 			easing = 30;
 			brightness = 255;
 		}
@@ -175,7 +177,7 @@ void loop() {
 		break;
 	  case 13:
 	  case 23:
-	    if (state13_loc < TOTAL_NUM_LEDS-25){
+	    if (state13_loc < -25){
 			state = 3;
 			current = pink;
 			brightness = 255;
@@ -313,15 +315,21 @@ void handle_state3(){
 void handle_state13(){
   for (int i=NUM_LEDS-1; i>=0; i--){
     if (i < state13_loc) break;
+    leds_low[i] = CRGB(pink.g, pink.r, pink.b);
+    /*
 	  int diffval = state13_loc-i;
-	  if (diffval < 20) leds_low[i] = CRGB(pink.g*(diffval)/20, pink.r*(diffval)/20, pink.b*(diffval)/20);
+	  if (diffval > 10) leds_low[i] = CRGB(pink.g*(diffval)/10, pink.r*(diffval)/10, pink.b*(diffval)/10);
     else leds_low[i] = CRGB(pink.g, pink.r, pink.b);
+    */
   }
   for (int i=NUM_LEDS-1; i>=0; i--){
     if (i+NUM_LEDS < state13_loc) break;
+    leds_high[i] = CRGB(pink.g, pink.r, pink.b);
+    /*
 	  int diffval = state13_loc-i;
-	  if (diffval < 20) leds_high[i] = CRGB(pink.g*(diffval)/20, pink.r*(diffval)/20, pink.b*(diffval)/20);
+	  if (diffval > 10) leds_high[i] = CRGB(pink.g*(diffval)/10, pink.r*(diffval)/10, pink.b*(diffval)/10);
     else leds_high[i] = CRGB(pink.g, pink.r, pink.b);
+    */
   }
   state13_loc-=2;
 }
