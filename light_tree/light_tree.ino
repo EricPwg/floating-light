@@ -2,8 +2,8 @@
 #include <math.h>
 #define NUM_LEDS 60
 #define TOTAL_NUM_LEDS 120
-#define DATA_PIN1 6
-#define DATA_PIN2 7
+#define DATA_PIN1 7
+#define DATA_PIN2 6
 
 #define RCWLPin A3
 #define TOUCHPin1 A5
@@ -230,7 +230,9 @@ void loop() {
   Serial.print(" ");
   Serial.print(current.b);
   Serial.print(" ");
-  Serial.println(state);
+  Serial.print(state);
+  Serial.print(" ");
+  Serial.println(rcwl);
   FastLED.show();
   delay(50);
 }
