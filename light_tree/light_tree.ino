@@ -51,17 +51,17 @@ struct Color{
   }
 };
 
-struct Color blue = {0, 0, 139};
-struct Color green = {20, 139, 40};
+struct Color blue = {16, 40, 110};
+struct Color green = {20, 135, 45};
 
 struct Color orange = {220, 70, 0};
-struct Color white = {255, 255, 255};
+struct Color white = {255, 250, 205};
 
 struct Color pink = {250, 100, 50};
 
 struct Color current = {0, 0, 0}; //current color setting
 struct Color target = {0, 0, 0};  //target color setting
-struct Color error = {2, 2, 2}; //if current is very close to the target
+struct Color error = {3, 3, 3}; //if current is very close to the target
 
 void setup() {
   Serial.begin(9600);
@@ -129,7 +129,7 @@ void loop() {
 		else if (rcwl_bool){
 			state = 12;
 			target = orange;
-			easing = 5;
+			easing = 15;
 		}
 		else state = 1;
 		break;
@@ -245,8 +245,8 @@ void handle_state1(){
    
    current = current + ((target-current)/easing);  //gradually change the color
 
-  if(brightness >= 255) brightness_delta = -5;
-  if(brightness <= 0) brightness_delta = 5;
+  if(brightness >= 255) brightness_delta = -4;
+  if(brightness <= 30) brightness_delta = 5;
   brightness += brightness_delta;
   
   for (int i=0; i<NUM_LEDS; i++){
